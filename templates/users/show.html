@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>
+    Hello, {{ user.username }}!
+</h1>
+
+<div>
+    <h2>Favorite quotes:</h2>
+
+    {% for i in range(favorite_quotes|length) %}
+    <div class="col-lg-4 col-md-6 col-12">
+        <p id="fave-quote">
+            "{{ favorite_quotes[i].quote_text }}"
+            — {{ favorite_characters[i].character_name }}
+        </p>
+
+        {% if g.user %}
+            {% if g.user.has_favorited(favorite_quotes[i]) %}
+                <form method="POST"
+                    action="/users/unfavorite/{{favorite_quotes[i].id}}">
+                <button class="btn btn-primary">Unfavorite</button>
+                </form>
+            {% else %}
+              <form method="POST" action="/users/favorite/{{favorite_quotes[i].id}}">
+                <button class="btn btn-outline-primary btn-sm">Favorite</button>
+              </form>
+            {% endif %}
+        {% endif %}
+        
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

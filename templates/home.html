@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+
+  <h1>THE LOTR QUOTE SITE!</h1>
+  <h2>Welcome {{ user.username }}</h2>
+
+  <div class="edit-btn-area">
+      <a href="/quotes/random-quote" class="btn btn-primary">Get a random quote!</a>
+  </div>
+
+  <div class="edit-btn-area">
+      <a href="/games/guess-character" class="btn btn-primary">Who said that quote!</a>
+  </div>
+
+</div>
+{% endblock %}

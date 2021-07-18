@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>
+        Who said that quote?
+    </h1>
+
+    <h2>
+        "{{ quote.quote_text }}"
+    </h2>
+
+    <form id="choice-form">
+        {% for character in character_choices %}
+            <input type="radio" name="choice" value="{{ character.character_name }}"">
+            <label for="{{ character.character_name }}">{{ character.character_name }}</label>
+            <br>
+        {% endfor %}
+        <br>
+        <input type="submit" id="submit_button" value="Submit">
+    </form>
+
+    <p class="invisible" id="correct_name">
+        {{ correct_character.character_name }}
+    </p>
+
+    <p class="invisible p-3 mb-3 bg-success text-white" id="correct">
+        CORRECT!
+    </p>
+
+    <p class="invisible p-3 mb-3 bg-danger text-white" id="incorrect">
+        INCORRECT!
+    </p>
+
+    <div class="edit-btn-area invisible" id="next_button">
+        <a href="/games/guess-character" class="btn btn-primary">Next Question!</a>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.js"></script>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="/static/game.js"></script>
+
+{% endblock %}
