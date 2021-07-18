@@ -6,30 +6,38 @@
         Random Quote
     </h1>
 
-    <div>
-        <p>
-            "{{ quote.quote_text }}"
-            — {{ character.character_name }}
-        </p>
+    <div class="col-md-12">
+        <div class="card" id="message-card" style="width: 40rem">
+            <div class="card-body">
+                <p>
+                    "{{ quote.quote_text }}"
+                    — {{ character.character_name }}
+                </p>
+        
+                {% if g.user %}
+                    {% if g.user.has_favorited(quote) %}
+                        <form method="POST"
+                            action="/users/unfavorite/{{quote.id}}">
+                        <button class="btn btn-primary">Unfavorite</button>
+                        </form>
+                    {% else %}
+                      <form method="POST" action="/users/favorite/{{quote.id}}">
+                        <button class="btn btn-outline-primary btn-sm">Favorite</button>
+                      </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+            </div>
+            
 
-        {% if g.user %}
-            {% if g.user.has_favorited(quote) %}
-                <form method="POST"
-                    action="/users/unfavorite/{{quote.id}}">
-                <button class="btn btn-primary">Unfavorite</button>
-                </form>
-            {% else %}
-              <form method="POST" action="/users/favorite/{{quote.id}}">
-                <button class="btn btn-outline-primary btn-sm">Favorite</button>
-              </form>
-            {% endif %}
-        {% endif %}
+        <div class="edit-btn-area">
+            <a href="/quotes/random-quote" class="btn btn-primary">Get Another Quote</a>
+        </div>
     </div>
     
     
+    
 
-    <div class="edit-btn-area">
-        <a href="/quotes/random-quote" class="btn btn-primary">Get Another Quote</a>
-    </div>
+    
 
 {% endblock %}
