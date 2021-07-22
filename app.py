@@ -196,6 +196,12 @@ def random_quote():
 
     return render_template("quotes/random-quote.html", quote = rand_quote, character = character)
 
+@app.route('/quotes/search-quote')
+def search_quote():
+    """Search quotes by character"""
+
+    return render_template("quotes/quotes-search.html")
+
 
 ##############################################################################
 # Games routes:
@@ -233,7 +239,7 @@ def guess_character():
 def init_characters_quotes():
     """Create the db columns for characters and quotes from the api"""
 
-    print("API STUFF")
+    print("DOING API STUFF")
 
     all_quotes = requests.get(API_URL + "/quote", headers = AUTH).json()
     all_characters = requests.get(API_URL + "/character", headers = AUTH).json()
