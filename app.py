@@ -163,17 +163,22 @@ def users_show(user_id):
 ##############################################################################
 # Favorite routes:
 
-@app.route('/users/favorite/<int:quote_id>', methods=["POST"])
+@app.route('/users/favorite/<int:quote_id>')
 def users_favorite(quote_id):
+    """Sets the quote of the given id to a favorite for the user"""
+    #url = request.form["value"]
+    #print(url)
+
     db.session.add(Favorite(quote_id = quote_id, user_id = g.user.id))
     db.session.commit()
 
     return redirect(f'/users/{g.user.id}')
-
-@app.route('/users/unfavorite/<int:quote_id>', methods=["POST"])
+    
+@app.route('/users/unfavorite/<int:quote_id>')
 def users_unfavorite(quote_id):
+    """Removes the quote of the given id as favorite for the user"""
+
     to_unfavorite = Favorite.query.filter(Favorite.quote_id == quote_id).filter(Favorite.user_id == g.user.id).delete()
-    #session.delete(to_unfavorite)
     db.session.commit()
     return redirect(f'/users/{g.user.id}')
 
@@ -200,7 +205,30 @@ def random_quote():
 def search_quote():
     """Search quotes by character"""
 
-    return render_template("quotes/quotes-search.html")
+    if not is_initialized():
+        init_characters_quotes()
+
+    all_characters = Character.get_characters_with_quotes()
+
+    search_words = request.args.get("q")
+    character = request.args.get("character-names")
+    print(character)
+    results = []
+    character_results = []
+
+    if not search_words:
+        search_words = ""
+    else:
+        results = find_quotes(search_words, character)
+
+    for result in results:
+        character = Character.query.filter(Character.api_id == result.character_id).first()
+        character_results.append(character)
+
+    return render_template(
+        "quotes/quotes-search.html", all_characters=all_characters, search_words=search_words, results=results, character_results=character_results
+    )
+
 
 
 ##############################################################################
@@ -216,7 +244,7 @@ def guess_character():
         init_characters_quotes()
 
     all_quotes = Quote.query.all()
-    all_characters = Character.query.all()
+    all_characters = Character.get_characters_with_quotes()
 
     rand = random.randrange(0, len(all_quotes))
     rand_quote = all_quotes[rand]
@@ -226,6 +254,11 @@ def guess_character():
     for i in range(0, 3):
         rand = random.randrange(0, len(all_characters))
         rand_character = all_characters[rand]
+
+        while rand_character in character_array:
+            rand = random.randrange(0, len(all_characters))
+            rand_character = all_characters[rand]
+
         character_array.append(rand_character)
 
     random.shuffle(character_array)
@@ -252,12 +285,50 @@ def init_characters_quotes():
 
     db.session.commit()
 
+    set_num_quotes()
+
+    
+def set_num_quotes():
+    """Set the num_quotes property of each character in the database"""
+
+    all_quotes = Quote.query.all()
+    all_characters = Character.query.all()
+
+    for character in all_characters:
+        for quote in all_quotes:
+            if character.api_id == quote.character_id:
+                character.num_quotes = character.num_quotes + 1
+
+                if character.character_name == "MINOR_CHARACTER":
+                    character.character_name = "Unnamed character"
+
+    db.session.commit()
 
 def is_initialized():
-    
+    """Check if the database has been initialized with data from the api"""
+
     if len(Quote.query.all()) < 2:
         print("Not initialized")
         return False
     else:
         print("Already initialized")
         return True
+
+
+##############################################################################
+# search function:
+
+def find_quotes(search_words, character_name):
+    results = []
+    all_quotes = Quote.query.all()
+
+    for quote in all_quotes:
+        if character_name == "Any":
+            if search_words.lower() in quote.quote_text.lower():
+                results.append(quote)
+        else:
+            character = Character.query.filter(Character.character_name == character_name).first()
+            if (search_words.lower() in quote.quote_text.lower()) and (character.api_id == quote.character_id):
+                results.append(quote)
+
+    return results

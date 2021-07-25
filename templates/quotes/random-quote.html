@@ -16,18 +16,17 @@
         
                 {% if g.user %}
                     {% if g.user.has_favorited(quote) %}
-                        <form method="POST"
-                            action="/users/unfavorite/{{quote.id}}">
+                        <form action="/users/unfavorite/{{quote.id}}">
                         <button class="btn btn-primary">Unfavorite</button>
                         </form>
                     {% else %}
-                      <form method="POST" action="/users/favorite/{{quote.id}}">
+                      <form action="/users/favorite/{{quote.id}}">
                         <button class="btn btn-outline-primary btn-sm">Favorite</button>
                       </form>
                     {% endif %}
                 {% endif %}
             </div>
-            </div>
+        </div>
             
 
         <div class="edit-btn-area">
@@ -35,9 +34,4 @@
         </div>
     </div>
     
-    
-    
-
-    
-
 {% endblock %}

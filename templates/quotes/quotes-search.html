@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>QUOTE SEARCH</h1>
+
+<div>
+    <form class="form col-md-4" action="/quotes/search-quote">
+        <div class="dropdown">
+            <label for="character-names">Choose a character:</label>
+            <select name="character-names" id="character-names">
+                <option value="Any">Any</option>
+                {% for character in all_characters %}
+                <option value="{{character.character_name}}">{{character.character_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+
+        <input name="q" class="form-control" placeholder="Search Quotes" id="search">
+        <br>
+        <button class="btn btn-primary">
+            SEARCH
+        </button>
+    </form>
+</div>
+
+<div class ="results">
+    {% for i in range(results|length) %}
+    <div class="col-lg-4 col-md-6 col-12">
+        <div class="card" id="message-card" style="width: 40rem">
+            <div class="card-body">
+                <p id="fave-quote">
+                    "{{ results[i].quote_text }}"
+                    — {{ character_results[i].character_name }}
+                </p>
+        
+                {% if g.user %}
+                    {% if g.user.has_favorited(results[i]) %}
+                        <form name="fave" value="/quotes/search-quote" action="/users/unfavorite/{{results[i].id}}">
+                            <button class="btn btn-primary">Unfavorite</button>
+                        </form>
+                    {% else %}
+                        <form name="fave" value="/quotes/search-quote" action="/users/favorite/{{results[i].id}}">
+                            <button class="btn btn-outline-primary btn-sm">Favorite</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script src="/static/search.js"></script>
+    
+{% endblock %}

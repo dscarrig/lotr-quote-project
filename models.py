@@ -150,6 +150,24 @@ class Character(db.Model):
         nullable=False
     )
 
+    num_quotes = db.Column(
+        db.Integer,
+        default=0
+    )
+
+    @classmethod
+    def get_characters_with_quotes(self):
+        result = []
+
+        all_characters = Character.query.all()
+
+        for character in all_characters:
+            if character.num_quotes > 0 and character.character_name != "Test":
+                result.append(character)
+
+        return result
+
+
 def connect_db(app):
     """Connect this database to provided Flask app.
 

@@ -1,7 +1,6 @@
 const $choiceForm = $("#choice-form");
 const $correct_name = $("#correct_name")
-const $correct_message = $("#correct")
-const $incorrect_message = $("#incorrect")
+const $result = $("#result")
 const $next_button = $("#next_button")
 const $submit_button = $("#submit_button")
 
@@ -14,13 +13,17 @@ function checkAnswer(evt) {
     choice = choice.replace(/[\n\r]/g, '').replace(/\s+/g,"");
     correct_name = correct_name.replace(/[\n\r]/g, '').replace(/\s+/g,"");
 
-    console.log(`Chose ${choice} correct is ${correct_name}`)
-
     if(choice === correct_name){
-        $correct_message.removeClass("invisible");
+        $result.removeClass("invisible");
+        $result.removeClass("bg-danger");
+        $result.addClass("bg-success");
+        $result.text("CORRECT!");
     }
     else{
-        $incorrect_message.removeClass("invisible");
+        $result.removeClass("invisible");
+        $result.removeClass("bg-success");
+        $result.addClass("bg-danger");
+        $result.text("INCORRECT!");
     }
 
     $next_button.removeClass("invisible");

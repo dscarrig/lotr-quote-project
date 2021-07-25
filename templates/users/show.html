@@ -20,12 +20,11 @@
         
                 {% if g.user %}
                     {% if g.user.has_favorited(favorite_quotes[i]) %}
-                        <form method="POST"
-                            action="/users/unfavorite/{{favorite_quotes[i].id}}">
+                        <form action="/users/unfavorite/{{favorite_quotes[i].id}}">
                         <button class="btn btn-primary">Unfavorite</button>
                         </form>
                     {% else %}
-                      <form method="POST" action="/users/favorite/{{favorite_quotes[i].id}}">
+                      <form action="/users/favorite/{{favorite_quotes[i].id}}">
                         <button class="btn btn-outline-primary btn-sm">Favorite</button>
                       </form>
                     {% endif %}
@@ -34,6 +33,10 @@
         </div>
     </div>
     {% endfor %}
+</div>
+
+<div class="edit-btn-area">
+    <a href="/quotes/random-quote" class="btn btn-primary">Get a random quote!</a>
 </div>
 
 {% endblock %}
