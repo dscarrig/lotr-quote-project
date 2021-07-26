@@ -23,7 +23,8 @@ app = Flask(__name__)
 # Get DB_URI from environ variable (useful for production/testing) or,
 # if not set there, use development local db.
 app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.environ.get('DATABASE_URL', 'postgresql:///lotrdb'))
+    os.environ.get('DATABASE_URL', 'postgresql:///lotrdb')
+)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
@@ -166,8 +167,6 @@ def users_show(user_id):
 @app.route('/users/favorite/<int:quote_id>')
 def users_favorite(quote_id):
     """Sets the quote of the given id to a favorite for the user"""
-    #url = request.form["value"]
-    #print(url)
 
     db.session.add(Favorite(quote_id = quote_id, user_id = g.user.id))
     db.session.commit()
@@ -212,12 +211,15 @@ def search_quote():
 
     search_words = request.args.get("q")
     character = request.args.get("character-names")
-    print(character)
+
     results = []
     character_results = []
 
     if not search_words:
         search_words = ""
+
+        if character != "Any" and character:
+            results = find_quotes(search_words, character)
     else:
         results = find_quotes(search_words, character)
 
@@ -245,6 +247,14 @@ def guess_character():
 
     all_quotes = Quote.query.all()
     all_characters = Character.get_characters_with_quotes()
+    score = request.args.get("score")
+
+    if not score:
+        score = 0
+
+    if int(score) > g.user.high_score:
+        g.user.high_score = score
+        db.session.commit()
 
     rand = random.randrange(0, len(all_quotes))
     rand_quote = all_quotes[rand]
@@ -263,7 +273,7 @@ def guess_character():
 
     random.shuffle(character_array)
 
-    return render_template("games/guess-character.html", quote = rand_quote, correct_character = correct_character, character_choices = character_array)
+    return render_template("games/guess-character.html", quote = rand_quote, correct_character = correct_character, character_choices = character_array, score = score)
 
 
 ##############################################################################
@@ -271,8 +281,6 @@ def guess_character():
 
 def init_characters_quotes():
     """Create the db columns for characters and quotes from the api"""
-
-    print("DOING API STUFF")
 
     all_quotes = requests.get(API_URL + "/quote", headers = AUTH).json()
     all_characters = requests.get(API_URL + "/character", headers = AUTH).json()
@@ -308,10 +316,8 @@ def is_initialized():
     """Check if the database has been initialized with data from the api"""
 
     if len(Quote.query.all()) < 2:
-        print("Not initialized")
         return False
     else:
-        print("Already initialized")
         return True
 
 
@@ -319,6 +325,8 @@ def is_initialized():
 # search function:
 
 def find_quotes(search_words, character_name):
+    """Receives a string of search words and a name of a character to quote and returns all quotes that match"""
+
     results = []
     all_quotes = Quote.query.all()
 
@@ -328,7 +336,12 @@ def find_quotes(search_words, character_name):
                 results.append(quote)
         else:
             character = Character.query.filter(Character.character_name == character_name).first()
-            if (search_words.lower() in quote.quote_text.lower()) and (character.api_id == quote.character_id):
+
+            if search_words == "":
+                if character.api_id == quote.character_id:
+                    results.append(quote)
+            
+            elif (search_words.lower() in quote.quote_text.lower()) and (character.api_id == quote.character_id):
                 results.append(quote)
 
     return results

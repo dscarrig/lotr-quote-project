@@ -2,17 +2,21 @@
 
 {% block content %}
 
-    <h1>
-        Who said that quote?
-    </h1>
+    <p id="score">
+        SCORE: {{score}}
+    </p>
 
     <h2>
-        "{{ quote.quote_text }}"
+        Who said that quote?
     </h2>
+
+    <h3>
+        "{{ quote.quote_text }}"
+    </h3>
 
     <form id="choice-form">
         {% for character in character_choices %}
-            <input type="radio" name="choice" value="{{ character.character_name }}"">
+            <input type="radio" name="choice" value="{{ character.character_name }}">
             <label for="{{ character.character_name }}">{{ character.character_name }}</label>
             <br>
         {% endfor %}
@@ -23,9 +27,14 @@
         result
     </p>
 
-    <div class="edit-btn-area invisible" id="next_button">
-        <a href="/games/guess-character" class="btn btn-primary">Next Question!</a>
-    </div>
+    <form class="form" action="/games/guess-character">
+        <div class="edit-btn-area invisible" id="next_button">
+            <button  class="btn btn-primary" id="submit_score" name="score" value="{{score}}">
+                Next Question!
+            </button>
+        </div>
+    </form>
+    
 
     <p class="invisible" id="correct_name">
         {{ correct_character.character_name }}

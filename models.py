@@ -29,6 +29,12 @@ class User(db.Model):
         nullable=False
     )
 
+    high_score = db.Column(
+        db.Integer,
+        nullable=False,
+        default=0
+    )
+
     favorites = db.relationship('Favorite')
 
     def __repr__(self):
