@@ -7,16 +7,14 @@ from flask import Flask, flash, render_template, request, redirect, session, g, 
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy import delete
 from sqlalchemy.exc import IntegrityError
-from access_token import ACCESS_TOKEN
 
 from forms import UserAddForm, LoginForm
 from models import db, connect_db, User, Favorite, Quote, Character
 
-
 CURR_USER_KEY = "curr_user"
 
 API_URL = "https://the-one-api.dev/v2"
-BEARER = "Bearer " + os.environ.get('ACCESS_TOKEN', ACCESS_TOKEN)
+BEARER = "Bearer " + os.environ.get('ACCESS_TOKEN', "I_RmnBvwf8Ucp87KVImD ")
 AUTH = {"Authorization" : BEARER}
 
 app = Flask(__name__)
