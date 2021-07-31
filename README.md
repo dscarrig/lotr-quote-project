@@ -10,4 +10,4 @@ When a user clicks their name on the top bar, they access a list of all quotes t
 
 The quote search page allows the user to enter a string and search for any quotes containing that string. The user can also select a character from the drop down to narrow down the quotes. If the user selects a character and clicks search with an empty search form, they will be shown every quote said by that character. Users can favorite or unfavorite quotes here as well.
 
-To run this site locally, a file called access_token.py must be present with ACCESS_TOKEN = TOKEN in it. The TOKEN value must be obtained from https://the-one-api.dev be registering an account. A postgresql database called lotrdb must be created and seed.py must also be run before starting the application.
+To run this site locally, a file called access_token.py must be present with ACCESS_TOKEN = TOKEN in it. The TOKEN value must be obtained from https://the-one-api.dev be registering an account. A postgresql database called lotrdb must be created and seed.py must also be run before starting the application. The site is also hosted on https://lotr-quote-game.herokuapp.com/
