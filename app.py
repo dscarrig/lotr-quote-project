@@ -131,12 +131,10 @@ def home():
     - logged in: 100 most recent messages of followed_users
     """
     
-    #if g.user:
-    #    return render_template('home.html', user = g.user)
-    #else:
-    #    return render_template('home-anon.html')
-
-    return render_template('base.html')
+    if g.user:
+        return render_template('home.html', user = g.user)
+    else:
+        return render_template('home-anon.html')
 
 
 ##############################################################################
