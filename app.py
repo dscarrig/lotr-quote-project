@@ -344,3 +344,12 @@ def find_quotes(search_words, character_name):
                 results.append(quote)
 
     return results
+
+
+
+##############################################################################
+# resume function:
+
+@app.route('/resume')
+def show_resume():
+    return render_template("resume.html")
