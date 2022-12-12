@@ -14,7 +14,7 @@ from models import db, connect_db, User, Favorite, Quote, Character
 CURR_USER_KEY = "curr_user"
 
 API_URL = "https://the-one-api.dev/v2"
-BEARER = "Bearer " + os.environ.get('ACCESS_TOKEN', "I_RmnBvwf8Ucp87KVImD ")
+BEARER = "Bearer " + os.environ.get('ACCESS_TOKEN', "lFmWYfA7tSvZKTU-xXZu")
 AUTH = {"Authorization" : BEARER}
 
 app = Flask(__name__)
