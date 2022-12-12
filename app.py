@@ -10,11 +10,12 @@ from sqlalchemy.exc import IntegrityError
 
 from forms import UserAddForm, LoginForm
 from models import db, connect_db, User, Favorite, Quote, Character
+from access_token import ACCESS_TOKEN
 
 CURR_USER_KEY = "curr_user"
 
 API_URL = "https://the-one-api.dev/v2"
-BEARER = "Bearer " + os.environ.get('ACCESS_TOKEN', "lFmWYfA7tSvZKTU-xXZu")
+BEARER = "Bearer " + os.environ.get('ACCESS_TOKEN', ACCESS_TOKEN)
 AUTH = {"Authorization" : BEARER}
 
 app = Flask(__name__)
