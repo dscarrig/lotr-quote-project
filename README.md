@@ -10,6 +10,6 @@ When a user clicks their name on the top bar, they access a list of all quotes t
 
 The quote search page allows the user to enter a string and search for any quotes containing that string. The user can also select a character from the drop down to narrow down the quotes. If the user selects a character and clicks search with an empty search form, they will be shown every quote said by that character. Users can favorite or unfavorite quotes here as well.
 
-To run this site locally, postgresql must be installed. Then create a database in the lotr-quote-project directory called "lotrdb". This can be done with "createdb -h localhost -p 5432 -U postgres lotrdb", assuming you are using the default 5432 port for postgresql and postgres username. 
+To run this site locally, postgresql must be installed. Then create a database in the lotr-quote-project directory called "lotrdb". This can be done with "createdb -h localhost -p 5432 -U postgres lotrdb", assuming you are using the default 5432 port and default postgres username. You may need to find a different open port and set the postgres user password before this can be created successfully.
 
 Install all requirements for the app with "pip install -r requirements.txt". You may need to insall pip first. Then run seed.py to seed the database. Now launch the app with "flask run".
